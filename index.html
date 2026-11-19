@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Sekai Shop - Completo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'pastel-pink': '#FFD1DC',
+                        'pastel-dark': '#F8A5C2',
+                        'pastel-light': '#FFF0F5',
+                        'sekai-green': '#98D8C8',
+                    },
+                    fontFamily: {
+                        'sans': ['Quicksand', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-pastel-light min-h-screen font-sans text-gray-700">
+
+    <!-- NAVBAR -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="showView('home')">
+                    <div class="bg-pastel-dark text-white p-2 rounded-lg mr-2 shadow-md"><i class="fa-solid fa-star"></i></div>
+                    <span class="font-bold text-xl text-pastel-dark">Sekai Shop</span>
+                </div>
+                <div class="hidden md:flex space-x-6 items-center">
+                    <button onclick="showView('home')" id="nav-home" class="text-pastel-dark font-bold border-b-2 border-pastel-dark pb-1 transition">Inicio</button>
+                    <button onclick="showView('shop')" id="nav-shop" class="text-gray-500 hover:text-pastel-dark font-medium transition">Tienda</button>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="showView('login')" class="text-gray-600 hover:text-pastel-dark"><i class="fa-regular fa-user"></i></button>
+                    <button class="text-gray-600 hover:text-pastel-dark relative">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        <span class="absolute -top-2 -right-2 bg-pastel-dark text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- VISTA: HOME -->
+    <main id="view-home" class="animate-fadeIn">
+        <section class="relative bg-white overflow-hidden">
+            <div class="max-w-7xl mx-auto">
+                <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32 pt-10 px-4 sm:px-6 lg:px-8">
+                    <div class="sm:text-center lg:text-left">
+                        <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+                            <span class="block xl:inline">Bienvenido al</span>
+                            <span class="block text-pastel-dark">Project Sekai Shop</span>
+                        </h1>
+                        <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                            Tu tienda de confianza para merch oficial de Hatsune Miku: Colorful Stage! Encuentra cartas, peluches y acrílicos de tus unidades favoritas.
+                        </p>
+                        <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+                            <button onclick="showView('shop')" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-pastel-dark hover:bg-opacity-90 md:py-4 md:text-lg md:px-10 transition transform hover:scale-105">
+                                <i class="fa-solid fa-bag-shopping mr-2"></i> Ir a la Tienda
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 bg-pastel-pink flex items-center justify-center p-10 hidden lg:flex">
+                <div class="bg-white p-6 rounded-3xl shadow-2xl transform rotate-3 max-w-sm w-full text-center border-4 border-pastel-dark">
+                    <img src="https://placehold.co/400x400/FFF0F5/F8A5C2?text=Hatsune+Miku" alt="Miku" class="rounded-2xl w-full mb-4">
+                    <h3 class="font-bold text-xl text-pastel-dark">¡Nuevo Drop!</h3>
+                    <p class="text-sm text-gray-500">Colección Melopale Collab</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16 bg-pastel-light">
+            <div class="max-w-4xl mx-auto px-4 text-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6"><i class="fa-solid fa-book-open text-pastel-dark mr-2"></i> ¿Qué es Project Sekai?</h2>
+                <p class="text-gray-600 text-lg leading-relaxed mb-4">
+                    <strong>Hatsune Miku: Colorful Stage!</strong> es un juego de ritmo donde los sentimientos de los jóvenes se conectan con el mundo virtual "Sekai".
+                </p>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    Acompaña a 5 unidades junto a los Virtual Singers mientras buscan sus verdaderos sentimientos a través de la música.
+                </p>
+            </div>
+        </section>
+
+        <section class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-gray-800">¿Por qué comprar con nosotros?</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-pastel-light p-8 rounded-2xl text-center shadow-sm">
+                        <div class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-pastel-dark text-2xl shadow-sm"><i class="fa-solid fa-truck-fast"></i></div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Envío Seguro</h3>
+                        <p class="text-gray-600 text-sm">Empaquetado cuidadoso con protección extra. Enviamos a todo el país.</p>
+                    </div>
+                    <div class="bg-pastel-light p-8 rounded-2xl text-center shadow-sm">
+                        <div class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-pastel-dark text-2xl shadow-sm"><i class="fa-solid fa-shield-halved"></i></div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Compra Protegida</h3>
+                        <p class="text-gray-600 text-sm">Pasarela de pago segura. Tus datos están encriptados.</p>
+                    </div>
+                    <div class="bg-pastel-light p-8 rounded-2xl text-center shadow-sm">
+                        <div class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-pastel-dark text-2xl shadow-sm"><i class="fa-solid fa-gem"></i></div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Merch Oficial</h3>
+                        <p class="text-gray-600 text-sm">100% auténtico. Importamos directamente productos oficiales.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- VISTA: TIENDA -->
+    <main id="view-shop" class="hidden max-w-7xl mx-auto px-4 py-8 animate-fadeIn">
+        <div class="flex flex-col md:flex-row gap-8">
+            <aside class="w-full md:w-64 flex-shrink-0 bg-white p-4 rounded-xl shadow-sm h-fit">
+                <h3 class="font-bold text-gray-800 mb-4 border-b pb-2">Filtros</h3>
+                <div class="mb-6">
+                    <h4 class="font-semibold text-sm mb-2 text-pastel-dark">Unidad / Grupo</h4>
+                    <div id="filter-units" class="space-y-2 text-sm text-gray-600"></div>
+                </div>
+                <div class="mb-6">
+                    <h4 class="font-semibold text-sm mb-2 text-pastel-dark">Personaje</h4>
+                    <div id="filter-characters" class="space-y-2 text-sm text-gray-600 max-h-48 overflow-y-auto pr-2">
+                        <p class="text-xs text-gray-400 italic">Selecciona una unidad primero</p>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" id="filter-instock" onchange="applyFilters()" class="accent-pastel-dark w-4 h-4">
+                        <span class="text-sm font-medium">Solo mostrar disponibles</span>
+                    </label>
+                </div>
+            </aside>
+            <div class="flex-1">
+                <div class="flex justify-between items-center mb-4">
+                    <span id="product-count" class="text-sm text-gray-500">0 productos</span>
+                </div>
+                <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- VISTA: LOGIN -->
+    <div id="view-login" class="hidden min-h-[80vh] flex items-center justify-center animate-fadeIn">
+        <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-pastel-pink">
+            <div class="text-center mb-6"><h2 class="text-2xl font-bold text-gray-800">Admin Login</h2></div>
+            <form onsubmit="handleLogin(event)">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Usuario</label>
+                    <input type="text" id="username" class="w-full px-4 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+                    <input type="password" id="password" class="w-full px-4 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none" required>
+                </div>
+                <button type="submit" class="w-full bg-pastel-dark text-white font-bold py-2 rounded-lg hover:bg-opacity-90 shadow-md">Entrar</button>
+                <div class="mt-4 text-center">
+                    <button type="button" onclick="showView('home')" class="text-sm text-gray-500 hover:text-pastel-dark">Volver al Inicio</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- VISTA: DASHBOARD -->
+    <main id="view-dashboard" class="hidden max-w-7xl mx-auto px-4 py-8 animate-fadeIn">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+            <h1 class="text-2xl font-bold text-gray-800">Inventario</h1>
+            <div class="flex flex-wrap gap-2">
+                <button onclick="seedDatabase()" class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 shadow-md flex items-center gap-2 text-sm">
+                    <i class="fa-solid fa-flask"></i> Generar 20 Datos Test
+                </button>
+                <button onclick="showView('shop')" class="px-4 py-2 text-gray-600 hover:text-pastel-dark text-sm border border-gray-300 rounded-lg">Ver Tienda</button>
+                <button onclick="openModal()" class="bg-pastel-dark text-white px-4 py-2 rounded-lg hover:bg-opacity-90 shadow-md flex items-center gap-2 text-sm">
+                    <i class="fa-solid fa-plus"></i> Nuevo Producto
+                </button>
+            </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-pastel-pink">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-pastel-light">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Producto</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Unidad</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Personajes</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Stock</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Precio</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-table-body" class="bg-white divide-y divide-gray-200"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL CRUD -->
+    <div id="crud-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100] overflow-y-auto">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-lg shadow-2xl my-8">
+            <h3 id="modal-title" class="text-xl font-bold mb-4 text-gray-800">Nuevo Producto</h3>
+            <form id="product-form" onsubmit="handleSaveProduct(event)">
+                <input type="hidden" id="product-id">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700">Nombre</label>
+                        <input type="text" id="p-name" class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Unidad</label>
+                        <select id="p-unit" class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none">
+                            <option value="VIRTUAL SINGER">VIRTUAL SINGER</option>
+                            <option value="Leo/need">Leo/need</option>
+                            <option value="MORE MORE JUMP!">MORE MORE JUMP!</option>
+                            <option value="Vivid Bad Squad">Vivid Bad Squad</option>
+                            <option value="Wonderlands x Showtime">Wonderlands x Showtime</option>
+                            <option value="25-ji Nightcord de">25-ji Nightcord de</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Stock</label>
+                        <input type="number" id="p-stock" class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none" required min="0">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700">Personajes (Separados por coma)</label>
+                        <input type="text" id="p-characters" placeholder="Ej: KAITO, Kohane" class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Precio</label>
+                        <input type="number" step="0.01" id="p-price" class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Moneda</label>
+                        <input type="text" id="p-currency" value="BOB" class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700">URL de Imagen</label>
+                        <input type="url" id="p-image" class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none" placeholder="https://..." required>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 mt-6">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 text-gray-500 hover:text-gray-700">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-pastel-dark text-white rounded-lg hover:bg-opacity-90">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 🔴 CAMBIA ESTA URL POR LA TUYA DE MOCKAPI (debe terminar en /products o el nombre de tu recurso)
+        const API_URL = 'https://6afee7e93a0e70bc8d542c7a.mockapi.io/products'; 
+        
+        const UNIT_CHARACTERS = {
+            'VIRTUAL SINGER': ['Miku', 'Rin', 'Len', 'Luka', 'MEIKO', 'KAITO'],
+            'Leo/need': ['Ichika', 'Saki', 'Honami', 'Shiho'],
+            'MORE MORE JUMP!': ['Minori', 'Haruka', 'Airi', 'Shizuku'],
+            'Vivid Bad Squad': ['Kohane', 'An', 'Akito', 'Toya'],
+            'Wonderlands x Showtime': ['Tsukasa', 'Emu', 'Nene', 'Rui'],
+            '25-ji Nightcord de': ['Kanade', 'Mafuyu', 'Ena', 'Mizuki']
+        };
+
+        const MERCH_TYPES = [
+            { name: 'Trading Card', basePrice: 15 }, { name: 'Peluche (Nesoberi)', basePrice: 120 },
+            { name: 'Acrílico (Stand)', basePrice: 45 }, { name: 'Badge (Pin)', basePrice: 10 },
+            { name: 'Clear File', basePrice: 25 }, { name: 'Taza (Mug)', basePrice: 60 },
+            { name: 'Llavero (Acrylic Keychain)', basePrice: 35 }, { name: 'Poster Oficial', basePrice: 40 }
+        ];
+
+        let products = [];
+        let isAdmin = false;
+        let activeFilters = { unit: null, character: null, onlyStock: false };
+
+        // --- NAVEGACIÓN ---
+        function showView(viewName) {
+            ['home', 'shop', 'login', 'dashboard'].forEach(v => {
+                const el = document.getElementById(`view-${v}`);
+                if(el) el.classList.add('hidden');
+            });
+            if (viewName === 'dashboard' && !isAdmin) return showView('login');
+            const target = document.getElementById(`view-${viewName}`);
+            if(target) target.classList.remove('hidden');
+            
+            const navHome = document.getElementById('nav-home');
+            const navShop = document.getElementById('nav-shop');
+            if (viewName === 'home') {
+                navHome.className = "text-pastel-dark font-bold border-b-2 border-pastel-dark pb-1 transition";
+                navShop.className = "text-gray-500 hover:text-pastel-dark font-medium transition";
+            } else if (viewName === 'shop') {
+                navShop.className = "text-pastel-dark font-bold border-b-2 border-pastel-dark pb-1 transition";
+                navHome.className = "text-gray-500 hover:text-pastel-dark font-medium transition";
+            }
+            if (viewName === 'shop') { renderFilters(); applyFilters(); }
+            if (viewName === 'dashboard') loadAdminTable();
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            if(document.getElementById('username').value === 'admin' && document.getElementById('password').value === '1234') {
+                isAdmin = true;
+                showView('dashboard');
+            } else alert('Usuario: admin / Pass: 1234');
+        }
+
+        // --- CARGA DE DATOS ---
+        async function loadProducts() {
+            try {
+                if(!API_URL.includes('TU_ID')) {
+                    const res = await fetch(API_URL);
+                    if(!res.ok) throw new Error('Error en API');
+                    const data = await res.json();
+                    products = data.map(p => ({
+                        ...p,
+                        characters: Array.isArray(p.characters) ? p.characters : (p.characters ? p.characters.split(',').map(s=>s.trim()) : [])
+                    }));
+                }
+                renderFilters();
+                applyFilters();
+            } catch (e) { 
+                console.error("Error cargando productos:", e); 
+            }
+        }
+
+        // --- GENERADOR DE DATOS TEST ---
+        async function seedDatabase() {
+            if(!confirm('¿Estás seguro? Esto agregará 20 productos aleatorios.')) return;
+            const allUnits = Object.keys(UNIT_CHARACTERS);
+            
+            for (let i = 0; i < 20; i++) {
+                const unit = allUnits[Math.floor(Math.random() * allUnits.length)];
+                const possibleChars = UNIT_CHARACTERS[unit];
+                const numChars = Math.random() > 0.5 ? 2 : 1;
+                const shuffled = [...possibleChars].sort(() => 0.5 - Math.random());
+                const selectedChars = shuffled.slice(0, numChars);
+                const merch = MERCH_TYPES[Math.floor(Math.random() * MERCH_TYPES.length)];
+                const name = `${merch.name} - ${selectedChars.join(' & ')}`;
+                const price = merch.basePrice + (Math.random() * 10 - 5);
+                const stock = Math.floor(Math.random() * 15);
+
+                const productData = {
+                    name: name, unit: unit, characters: selectedChars,
+                    price: parseFloat(price.toFixed(2)), currency: 'BOB', stock: stock,
+                    imageUrl: `https://placehold.co/300x300/FFD1DC/000000?text=${encodeURIComponent(selectedChars[0])}`,
+                    isNew: Math.random() > 0.7
+                };
+
+                if(!API_URL.includes('TU_ID')) {
+                    await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(productData) });
+                } else {
+                    productData.id = Date.now().toString() + i;
+                    products.unshift(productData);
+                }
+            }
+            alert('¡Se han generado 20 productos de prueba!');
+            if(!API_URL.includes('TU_ID')) await loadProducts();
+            loadAdminTable();
+            applyFilters();
+        }
+
+        // --- FILTROS Y RENDER ---
+        function renderFilters() {
+            const unitContainer = document.getElementById('filter-units');
+            unitContainer.innerHTML = Object.keys(UNIT_CHARACTERS).map(unit => `
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" value="${unit}" onchange="toggleUnitFilter(this)" class="accent-pastel-dark w-4 h-4">
+                    <span>${unit}</span>
+                </label>
+            `).join('');
+        }
+
+        function toggleUnitFilter(checkbox) {
+            document.querySelectorAll('#filter-units input').forEach(cb => { if(cb !== checkbox) cb.checked = false; });
+            activeFilters.unit = checkbox.checked ? checkbox.value : null;
+            activeFilters.character = null;
+            const charContainer = document.getElementById('filter-characters');
+            if(activeFilters.unit) {
+                const chars = UNIT_CHARACTERS[activeFilters.unit];
+                charContainer.innerHTML = chars.map(c => `
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" value="${c}" onchange="toggleCharacterFilter(this)" class="accent-pastel-dark w-4 h-4">
+                        <span>${c}</span>
+                    </label>
+                `).join('');
+            } else {
+                charContainer.innerHTML = '<p class="text-xs text-gray-400 italic">Selecciona una unidad primero</p>';
+            }
+            applyFilters();
+        }
+
+        function toggleCharacterFilter(checkbox) {
+            document.querySelectorAll('#filter-characters input').forEach(cb => { if(cb !== checkbox) cb.checked = false; });
+            activeFilters.character = checkbox.checked ? checkbox.value : null;
+            applyFilters();
+        }
+
+        function applyFilters() {
+            activeFilters.onlyStock = document.getElementById('filter-instock').checked;
+            let filtered = products;
+            if (activeFilters.unit) filtered = filtered.filter(p => p.unit === activeFilters.unit);
+            if (activeFilters.character) filtered = filtered.filter(p => p.characters.includes(activeFilters.character));
+            if (activeFilters.onlyStock) filtered = filtered.filter(p => p.stock > 0);
+            document.getElementById('product-count').innerText = `${filtered.length} productos`;
+            renderShopGrid(filtered);
+        }
+
+        function renderShopGrid(items) {
+            const grid = document.getElementById('product-grid');
+            if(items.length === 0) {
+                grid.innerHTML = '<div class="col-span-full text-center py-10 text-gray-400">No hay productos.</div>';
+                return;
+            }
+            grid.innerHTML = items.map(p => {
+                const isOutOfStock = p.stock <= 0;
+                return `
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition overflow-hidden group relative">
+                    ${isOutOfStock ? '<div class="absolute inset-0 bg-white bg-opacity-60 z-10 flex items-center justify-center"><span class="bg-red-500 text-white px-3 py-1 rounded-full font-bold transform -rotate-12">AGOTADO</span></div>' : ''}
+                    <div class="relative h-64 bg-pastel-light overflow-hidden">
+                        <img src="${p.imageUrl}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                        ${p.isNew && !isOutOfStock ? `<span class="absolute top-3 left-3 bg-sekai-green text-white text-xs font-bold px-2 py-1 rounded">NEW</span>` : ''}
+                    </div>
+                    <div class="p-4">
+                        <p class="text-xs text-pastel-dark font-bold mb-1">${p.unit}</p>
+                        <h3 class="text-sm font-bold text-gray-800 line-clamp-2 h-10 mb-2">${p.name}</h3>
+                        <div class="flex flex-wrap gap-1 mb-2">
+                            ${p.characters.map(c => `<span class="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">${c}</span>`).join('')}
+                        </div>
+                        <div class="flex justify-between items-center mt-2 border-t pt-2">
+                            <span class="text-xs text-gray-500">Stock: ${p.stock}</span>
+                            <span class="font-bold text-gray-800">Bs${parseFloat(p.price).toFixed(2)}</span>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // --- ADMIN TABLE ---
+        function loadAdminTable() {
+            const tbody = document.getElementById('admin-table-body');
+            if(products.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-gray-400">No hay productos. ¡Usa el botón de Testing!</td></tr>';
+                return;
+            }
+            tbody.innerHTML = products.map(p => `
+                <tr class="hover:bg-pastel-light transition">
+                    <td class="px-6 py-4">
+                        <div class="flex items-center">
+                            <img src="${p.imageUrl}" class="h-10 w-10 rounded object-cover mr-3">
+                            <span class="text-sm font-medium text-gray-800 truncate max-w-[150px]">${p.name}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-500">${p.unit}</td>
+                    <td class="px-6 py-4 text-sm text-gray-500 max-w-[120px] truncate">${p.characters.join(', ')}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 text-xs font-bold rounded-full ${p.stock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">${p.stock}</span>
+                    </td>
+                    <td class="px-6 py-4 text-sm font-bold text-gray-800">Bs${parseFloat(p.price).toFixed(2)}</td>
+                    <td class="px-6 py-4 text-sm font-medium">
+                        <button onclick="editProduct('${p.id}')" class="text-blue-500 hover:text-blue-700 mr-3"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteProduct('${p.id}')" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>`).join('');
+        }
+
+        // --- CRUD ---
+        const modal = document.getElementById('crud-modal');
+        const form = document.getElementById('product-form');
+
+        function openModal(isEdit = false) {
+            modal.classList.remove('hidden');
+            if(!isEdit) { form.reset(); document.getElementById('product-id').value = ''; document.getElementById('modal-title').innerText = 'Nuevo Producto'; }
+        }
+        function closeModal() { modal.classList.add('hidden'); }
+
+        function editProduct(id) {
+            const p = products.find(x => x.id === id);
+            if(p) {
+                document.getElementById('product-id').value = p.id;
+                document.getElementById('p-name').value = p.name;
+                document.getElementById('p-unit').value = p.unit;
+                document.getElementById('p-stock').value = p.stock;
+                document.getElementById('p-characters').value = p.characters.join(', ');
+                document.getElementById('p-price').value = p.price;
+                document.getElementById('p-currency').value = p.currency;
+                document.getElementById('p-image').value = p.imageUrl;
+                document.getElementById('modal-title').innerText = 'Editar Producto';
+                openModal(true);
+            }
+        }
+
+        // 🔴 AQUÍ ESTÁ LA CORRECCIÓN DEL CÓDIGO CORTADO
+        async function handleSaveProduct(e) {
+            e.preventDefault();
+            const id = document.getElementById('product-id').value;
+            const charString = document.getElementById('p-characters').value;
+            const charArray = charString.split(',').map(s => s.trim()).filter(s => s !== '');
+
+            const data = {
+                name: document.getElementById('p-name').value,
+                unit: document.getElementById('p-unit').value,
+                stock: parseInt(document.getElementById('p-stock').value),
+                characters: charArray,
+                price: parseFloat(document.getElementById('p-price').value),
+                currency: document.getElementById('p-currency').value,
+                imageUrl: document.getElementById('p-image').value,
+                isNew: true
+            };
+
+            try {
+                if (id) {
+                    // UPDATE
+                    if(!API_URL.includes('TU_ID')) {
+                        await fetch(`${API_URL}/${id}`, { 
+                            method: 'PUT', 
+                            headers: {'Content-Type': 'application/json'}, 
+                            body: JSON.stringify(data) 
+                        });
+                    } else {
+                        const idx = products.findIndex(p => p.id === id);
+                        products[idx] = { ...products[idx], ...data };
+                    }
+                } else {
+                    // CREATE
+                    if(!API_URL.includes('TU_ID')) {
+                        await fetch(API_URL, { 
+                            method: 'POST', 
+                            headers: {'Content-Type': 'application/json'}, 
+                            body: JSON.stringify(data) 
+                        });
+                    } else {
+                        data.id = Date.now().toString();
+                        products.unshift(data);
+                    }
+                }
+                
+                closeModal();
+                if(!API_URL.includes('TU_ID')) await loadProducts();
+                loadAdminTable();
+                applyFilters();
+            } catch (error) {
+                console.error("Error al guardar:", error);
+                alert("Hubo un error al guardar en la API.");
+            }
+        }
+
+        async function deleteProduct(id) {
+            if(confirm('¿Eliminar producto?')) {
+                try {
+                    if(!API_URL.includes('TU_ID')) await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+                    products = products.filter(p => p.id !== id);
+                    loadAdminTable();
+                    applyFilters();
+                } catch (error) {
+                    console.error("Error al eliminar:", error);
+                }
+            }
+        }
+
+        // --- INICIALIZACIÓN ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProducts();
+            showView('home');
+        });
+    </script>
+</body>
+</html>
