@@ -181,28 +181,19 @@
     </main>
 
     <!-- VISTA: LOGIN -->
-    <div id="view-login" class="hidden min-h-[80vh] flex items-center justify-center animate-fadeIn">
+    <div id="view-login" class="hidden min-h-[80vh] flex items-center justify-center">
         <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-pastel-pink text-center">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Acceso Administrador</h2>
 
-            <!-- Icono decorativo -->
-            <div
-                class="bg-pastel-pink w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-pastel-dark text-2xl">
-                <i class="fa-solid fa-lock"></i>
-            </div>
-
-            <h2 class="text-2xl font-bold text-gray-800 mb-2">Acceso Administrador</h2>
-            <p class="text-sm text-gray-500 mb-8">Solo la cuenta autorizada puede entrar.</p>
-
-            <!-- BOTÓN DE GOOGLE -->
+            <!-- ESTE ES EL BOTÓN QUE ABRE GOOGLE -->
             <button onclick="window.loginConGoogle()"
-                class="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 font-medium py-3 rounded-lg hover:bg-gray-50 transition shadow-sm mb-4">
+                class="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 font-medium py-3 rounded-lg hover:bg-gray-50 transition shadow-sm">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"
                     class="w-5 h-5">
                 Iniciar sesión con Google
             </button>
 
-            <!-- Botón para volver -->
-            <button type="button" onclick="showView('home')" class="text-sm text-gray-500 hover:text-pastel-dark">
+            <button type="button" onclick="showView('home')" class="text-sm text-gray-500 hover:text-pastel-dark mt-4">
                 Volver al Inicio
             </button>
         </div>
@@ -340,6 +331,9 @@
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
 
+                // Tu UID
+                const ALLOWED_UID = "r7Odks38mCVEaTFVb9uEKyPmXS92";
+
                 if (user.uid !== ALLOWED_UID) {
                     alert("⛔ Acceso denegado. Esta cuenta no está autorizada.");
                     await signOut(auth);
@@ -347,28 +341,29 @@
                 }
 
                 console.log("Bienvenido, admin:", user.email);
-                window.isAdmin = true;
-                window.showView('dashboard');
+
+                // Disparamos el evento para que el script principal se entere
+                document.dispatchEvent(new Event('adminLoggedIn'));
 
             } catch (error) {
-                // Si el usuario cerró la ventana o se canceló la petición, no hacemos nada
-                if (error.code === 'auth/cancelled-popup-request' || error.code === 'auth/popup-closed-by-user') {
-                    console.log("Inicio de sesión cancelado.");
-                    return;
-                }
-
+                if (error.code === 'auth/cancelled-popup-request' || error.code === 'auth/popup-closed-by-user') return;
                 console.error("Error en login:", error);
                 alert("Error al iniciar sesión. Inténtalo de nuevo.");
             }
         };
 
-        // 6. Observador de estado (opcional pero recomendado)
+        // Para que recuerde la sesión si recargas la página
         onAuthStateChanged(auth, (user) => {
-            if (user && user.uid === ALLOWED_UID) {
-                console.log("Sesión activa:", user.email);
-                // Aquí podrías mostrar el dashboard automáticamente si ya había sesión
+            if (user) {
+                const ALLOWED_UID = "r7Odks38mCVEaTFVb9uEKyPmXS92";
+                if (user.uid === ALLOWED_UID) {
+                    document.dispatchEvent(new Event('adminLoggedIn'));
+                } else {
+                    auth.signOut();
+                }
             }
         });
+
     </script>
 
     <script>
@@ -394,10 +389,16 @@
             { name: 'Llavero (Acrylic Keychain)', basePrice: 35 }, { name: 'Poster Oficial', basePrice: 40 }
         ];
 
-
-        let products = [];
         let isAdmin = false;
+        let products = [];
         let activeFilters = { unit: null, character: null, onlyStock: false };
+
+        // Esta línea es la que recibe la orden de Firebase de cambiar de pantalla
+        document.addEventListener('adminLoggedIn', () => {
+            isAdmin = true;
+            showView('dashboard');
+        });
+
 
         // --- NAVEGACIÓN ---
         function showView(viewName) {
