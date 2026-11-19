@@ -359,7 +359,7 @@
 
         // 6. Observador de estado (opcional pero recomendado)
         onAuthStateChanged(auth, (user) => {
-            if (user && user.email === ALLOWED_EMAIL) {
+            if (user && user.uid === ALLOWED_UID) {
                 console.log("Sesión activa:", user.email);
                 // Aquí podrías mostrar el dashboard automáticamente si ya había sesión
             }
