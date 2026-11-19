@@ -120,7 +120,8 @@
                     <div class="bg-pastel-light p-8 rounded-2xl text-center shadow-sm">
                         <div
                             class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-pastel-dark text-2xl shadow-sm">
-                            <i class="fa-solid fa-truck-fast"></i></div>
+                            <i class="fa-solid fa-truck-fast"></i>
+                        </div>
                         <h3 class="text-xl font-bold text-gray-800 mb-2">Envío Seguro</h3>
                         <p class="text-gray-600 text-sm">Empaquetado cuidadoso con protección extra. Enviamos a todo el
                             país.</p>
@@ -128,14 +129,16 @@
                     <div class="bg-pastel-light p-8 rounded-2xl text-center shadow-sm">
                         <div
                             class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-pastel-dark text-2xl shadow-sm">
-                            <i class="fa-solid fa-shield-halved"></i></div>
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
                         <h3 class="text-xl font-bold text-gray-800 mb-2">Compra Protegida</h3>
                         <p class="text-gray-600 text-sm">Pasarela de pago segura. Tus datos están encriptados.</p>
                     </div>
                     <div class="bg-pastel-light p-8 rounded-2xl text-center shadow-sm">
                         <div
                             class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-pastel-dark text-2xl shadow-sm">
-                            <i class="fa-solid fa-gem"></i></div>
+                            <i class="fa-solid fa-gem"></i>
+                        </div>
                         <h3 class="text-xl font-bold text-gray-800 mb-2">Merch Oficial</h3>
                         <p class="text-gray-600 text-sm">100% auténtico. Importamos directamente productos oficiales.
                         </p>
@@ -329,8 +332,7 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
-        // 4. Tu correo permitido (CÁMBIALO por el tuyo)
-        const ALLOWED_EMAIL = "tu_correo@gmail.com";
+        const ALLOWED_UID = "r7Odks38mCVEaTFVb9uEKyPmXS92";
 
         // 5. Función de login (la que llamará tu botón)
         window.loginConGoogle = async () => {
@@ -338,23 +340,20 @@
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
 
-                // Verificación del correo
-                if (user.email !== ALLOWED_EMAIL) {
+                // VERIFICACIÓN POR UID
+                if (user.uid !== ALLOWED_UID) {
                     alert("⛔ Acceso denegado. Esta cuenta no está autorizada.");
                     await signOut(auth);
                     return;
                 }
 
-                // Si es correcto, entramos al dashboard
                 console.log("Bienvenido, admin:", user.email);
-                // Como estamos en un módulo, no podemos llamar a showView directamente si está fuera.
-                // Usamos una variable global o un evento.
                 window.isAdmin = true;
-                window.showView('dashboard'); // Asumiendo que showView es global
+                window.showView('dashboard');
 
             } catch (error) {
                 console.error("Error en login:", error);
-                alert("Error al iniciar sesión. Inténtalo de nuevo.");
+                alert("Error al iniciar sesión. Inténtalo de nuevo. (Revisa la consola)");
             }
         };
 
