@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +25,10 @@
         }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 </head>
+
 <body class="bg-pastel-light min-h-screen font-sans text-gray-700">
 
     <!-- NAVBAR -->
@@ -32,18 +36,23 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="showView('home')">
-                    <div class="bg-pastel-dark text-white p-2 rounded-lg mr-2 shadow-md"><i class="fa-solid fa-star"></i></div>
+                    <div class="bg-pastel-dark text-white p-2 rounded-lg mr-2 shadow-md"><i
+                            class="fa-solid fa-star"></i></div>
                     <span class="font-bold text-xl text-pastel-dark">Sekai Shop</span>
                 </div>
                 <div class="hidden md:flex space-x-6 items-center">
-                    <button onclick="showView('home')" id="nav-home" class="text-pastel-dark font-bold border-b-2 border-pastel-dark pb-1 transition">Inicio</button>
-                    <button onclick="showView('shop')" id="nav-shop" class="text-gray-500 hover:text-pastel-dark font-medium transition">Tienda</button>
+                    <button onclick="showView('home')" id="nav-home"
+                        class="text-pastel-dark font-bold border-b-2 border-pastel-dark pb-1 transition">Inicio</button>
+                    <button onclick="showView('shop')" id="nav-shop"
+                        class="text-gray-500 hover:text-pastel-dark font-medium transition">Tienda</button>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <button onclick="showView('login')" class="text-gray-600 hover:text-pastel-dark"><i class="fa-regular fa-user"></i></button>
+                    <button onclick="showView('login')" class="text-gray-600 hover:text-pastel-dark"><i
+                            class="fa-regular fa-user"></i></button>
                     <button class="text-gray-600 hover:text-pastel-dark relative">
                         <i class="fa-solid fa-bag-shopping"></i>
-                        <span class="absolute -top-2 -right-2 bg-pastel-dark text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center">0</span>
+                        <span
+                            class="absolute -top-2 -right-2 bg-pastel-dark text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center">0</span>
                     </button>
                 </div>
             </div>
@@ -54,26 +63,33 @@
     <main id="view-home" class="animate-fadeIn">
         <section class="relative bg-white overflow-hidden">
             <div class="max-w-7xl mx-auto">
-                <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32 pt-10 px-4 sm:px-6 lg:px-8">
+                <div
+                    class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32 pt-10 px-4 sm:px-6 lg:px-8">
                     <div class="sm:text-center lg:text-left">
                         <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
                             <span class="block xl:inline">Bienvenido al</span>
                             <span class="block text-pastel-dark">Project Sekai Shop</span>
                         </h1>
-                        <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                            Tu tienda de confianza para merch oficial de Hatsune Miku: Colorful Stage! Encuentra cartas, peluches y acrílicos de tus unidades favoritas.
+                        <p
+                            class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                            Tu tienda de confianza para merch oficial de Hatsune Miku: Colorful Stage! Encuentra cartas,
+                            peluches y acrílicos de tus unidades favoritas.
                         </p>
                         <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                            <button onclick="showView('shop')" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-pastel-dark hover:bg-opacity-90 md:py-4 md:text-lg md:px-10 transition transform hover:scale-105">
+                            <button onclick="showView('shop')"
+                                class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-pastel-dark hover:bg-opacity-90 md:py-4 md:text-lg md:px-10 transition transform hover:scale-105">
                                 <i class="fa-solid fa-bag-shopping mr-2"></i> Ir a la Tienda
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 bg-pastel-pink flex items-center justify-center p-10 hidden lg:flex">
-                <div class="bg-white p-6 rounded-3xl shadow-2xl transform rotate-3 max-w-sm w-full text-center border-4 border-pastel-dark">
-                    <img src="https://placehold.co/400x400/FFF0F5/F8A5C2?text=Hatsune+Miku" alt="Miku" class="rounded-2xl w-full mb-4">
+            <div
+                class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 bg-pastel-pink flex items-center justify-center p-10 hidden lg:flex">
+                <div
+                    class="bg-white p-6 rounded-3xl shadow-2xl transform rotate-3 max-w-sm w-full text-center border-4 border-pastel-dark">
+                    <img src="https://placehold.co/400x400/FFF0F5/F8A5C2?text=Hatsune+Miku" alt="Miku"
+                        class="rounded-2xl w-full mb-4">
                     <h3 class="font-bold text-xl text-pastel-dark">¡Nuevo Drop!</h3>
                     <p class="text-sm text-gray-500">Colección Melopale Collab</p>
                 </div>
@@ -82,12 +98,15 @@
 
         <section class="py-16 bg-pastel-light">
             <div class="max-w-4xl mx-auto px-4 text-center">
-                <h2 class="text-3xl font-bold text-gray-800 mb-6"><i class="fa-solid fa-book-open text-pastel-dark mr-2"></i> ¿Qué es Project Sekai?</h2>
+                <h2 class="text-3xl font-bold text-gray-800 mb-6"><i
+                        class="fa-solid fa-book-open text-pastel-dark mr-2"></i> ¿Qué es Project Sekai?</h2>
                 <p class="text-gray-600 text-lg leading-relaxed mb-4">
-                    <strong>Hatsune Miku: Colorful Stage!</strong> es un juego de ritmo donde los sentimientos de los jóvenes se conectan con el mundo virtual "Sekai".
+                    <strong>Hatsune Miku: Colorful Stage!</strong> es un juego de ritmo donde los sentimientos de los
+                    jóvenes se conectan con el mundo virtual "Sekai".
                 </p>
                 <p class="text-gray-600 text-lg leading-relaxed">
-                    Acompaña a 5 unidades junto a los Virtual Singers mientras buscan sus verdaderos sentimientos a través de la música.
+                    Acompaña a 5 unidades junto a los Virtual Singers mientras buscan sus verdaderos sentimientos a
+                    través de la música.
                 </p>
             </div>
         </section>
@@ -99,19 +118,27 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div class="bg-pastel-light p-8 rounded-2xl text-center shadow-sm">
-                        <div class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-pastel-dark text-2xl shadow-sm"><i class="fa-solid fa-truck-fast"></i></div>
+                        <div
+                            class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-pastel-dark text-2xl shadow-sm">
+                            <i class="fa-solid fa-truck-fast"></i></div>
                         <h3 class="text-xl font-bold text-gray-800 mb-2">Envío Seguro</h3>
-                        <p class="text-gray-600 text-sm">Empaquetado cuidadoso con protección extra. Enviamos a todo el país.</p>
+                        <p class="text-gray-600 text-sm">Empaquetado cuidadoso con protección extra. Enviamos a todo el
+                            país.</p>
                     </div>
                     <div class="bg-pastel-light p-8 rounded-2xl text-center shadow-sm">
-                        <div class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-pastel-dark text-2xl shadow-sm"><i class="fa-solid fa-shield-halved"></i></div>
+                        <div
+                            class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-pastel-dark text-2xl shadow-sm">
+                            <i class="fa-solid fa-shield-halved"></i></div>
                         <h3 class="text-xl font-bold text-gray-800 mb-2">Compra Protegida</h3>
                         <p class="text-gray-600 text-sm">Pasarela de pago segura. Tus datos están encriptados.</p>
                     </div>
                     <div class="bg-pastel-light p-8 rounded-2xl text-center shadow-sm">
-                        <div class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-pastel-dark text-2xl shadow-sm"><i class="fa-solid fa-gem"></i></div>
+                        <div
+                            class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-pastel-dark text-2xl shadow-sm">
+                            <i class="fa-solid fa-gem"></i></div>
                         <h3 class="text-xl font-bold text-gray-800 mb-2">Merch Oficial</h3>
-                        <p class="text-gray-600 text-sm">100% auténtico. Importamos directamente productos oficiales.</p>
+                        <p class="text-gray-600 text-sm">100% auténtico. Importamos directamente productos oficiales.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -135,7 +162,8 @@
                 </div>
                 <div class="mb-4">
                     <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" id="filter-instock" onchange="applyFilters()" class="accent-pastel-dark w-4 h-4">
+                        <input type="checkbox" id="filter-instock" onchange="applyFilters()"
+                            class="accent-pastel-dark w-4 h-4">
                         <span class="text-sm font-medium">Solo mostrar disponibles</span>
                     </label>
                 </div>
@@ -151,22 +179,29 @@
 
     <!-- VISTA: LOGIN -->
     <div id="view-login" class="hidden min-h-[80vh] flex items-center justify-center animate-fadeIn">
-        <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-pastel-pink">
-            <div class="text-center mb-6"><h2 class="text-2xl font-bold text-gray-800">Admin Login</h2></div>
-            <form onsubmit="handleLogin(event)">
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Usuario</label>
-                    <input type="text" id="username" class="w-full px-4 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none" required>
-                </div>
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
-                    <input type="password" id="password" class="w-full px-4 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none" required>
-                </div>
-                <button type="submit" class="w-full bg-pastel-dark text-white font-bold py-2 rounded-lg hover:bg-opacity-90 shadow-md">Entrar</button>
-                <div class="mt-4 text-center">
-                    <button type="button" onclick="showView('home')" class="text-sm text-gray-500 hover:text-pastel-dark">Volver al Inicio</button>
-                </div>
-            </form>
+        <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-pastel-pink text-center">
+
+            <!-- Icono decorativo -->
+            <div
+                class="bg-pastel-pink w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-pastel-dark text-2xl">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Acceso Administrador</h2>
+            <p class="text-sm text-gray-500 mb-8">Solo la cuenta autorizada puede entrar.</p>
+
+            <!-- BOTÓN DE GOOGLE -->
+            <button onclick="window.loginConGoogle()"
+                class="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 font-medium py-3 rounded-lg hover:bg-gray-50 transition shadow-sm mb-4">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"
+                    class="w-5 h-5">
+                Iniciar sesión con Google
+            </button>
+
+            <!-- Botón para volver -->
+            <button type="button" onclick="showView('home')" class="text-sm text-gray-500 hover:text-pastel-dark">
+                Volver al Inicio
+            </button>
         </div>
     </div>
 
@@ -175,11 +210,15 @@
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
             <h1 class="text-2xl font-bold text-gray-800">Inventario</h1>
             <div class="flex flex-wrap gap-2">
-                <button onclick="seedDatabase()" class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 shadow-md flex items-center gap-2 text-sm">
+                <button onclick="seedDatabase()"
+                    class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 shadow-md flex items-center gap-2 text-sm">
                     <i class="fa-solid fa-flask"></i> Generar 20 Datos Test
                 </button>
-                <button onclick="showView('shop')" class="px-4 py-2 text-gray-600 hover:text-pastel-dark text-sm border border-gray-300 rounded-lg">Ver Tienda</button>
-                <button onclick="openModal()" class="bg-pastel-dark text-white px-4 py-2 rounded-lg hover:bg-opacity-90 shadow-md flex items-center gap-2 text-sm">
+                <button onclick="showView('shop')"
+                    class="px-4 py-2 text-gray-600 hover:text-pastel-dark text-sm border border-gray-300 rounded-lg">Ver
+                    Tienda</button>
+                <button onclick="openModal()"
+                    class="bg-pastel-dark text-white px-4 py-2 rounded-lg hover:bg-opacity-90 shadow-md flex items-center gap-2 text-sm">
                     <i class="fa-solid fa-plus"></i> Nuevo Producto
                 </button>
             </div>
@@ -204,7 +243,8 @@
     </main>
 
     <!-- MODAL CRUD -->
-    <div id="crud-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100] overflow-y-auto">
+    <div id="crud-modal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100] overflow-y-auto">
         <div class="bg-white rounded-2xl p-6 w-full max-w-lg shadow-2xl my-8">
             <h3 id="modal-title" class="text-xl font-bold mb-4 text-gray-800">Nuevo Producto</h3>
             <form id="product-form" onsubmit="handleSaveProduct(event)">
@@ -212,11 +252,14 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
                     <div class="md:col-span-2">
                         <label class="block text-sm font-medium text-gray-700">Nombre</label>
-                        <input type="text" id="p-name" class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none" required>
+                        <input type="text" id="p-name"
+                            class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none"
+                            required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Unidad</label>
-                        <select id="p-unit" class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none">
+                        <select id="p-unit"
+                            class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none">
                             <option value="VIRTUAL SINGER">VIRTUAL SINGER</option>
                             <option value="Leo/need">Leo/need</option>
                             <option value="MORE MORE JUMP!">MORE MORE JUMP!</option>
@@ -227,37 +270,110 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Stock</label>
-                        <input type="number" id="p-stock" class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none" required min="0">
+                        <input type="number" id="p-stock"
+                            class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none"
+                            required min="0">
                     </div>
                     <div class="md:col-span-2">
                         <label class="block text-sm font-medium text-gray-700">Personajes (Separados por coma)</label>
-                        <input type="text" id="p-characters" placeholder="Ej: KAITO, Kohane" class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none">
+                        <input type="text" id="p-characters" placeholder="Ej: KAITO, Kohane"
+                            class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Precio</label>
-                        <input type="number" step="0.01" id="p-price" class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none" required>
+                        <input type="number" step="0.01" id="p-price"
+                            class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none"
+                            required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Moneda</label>
-                        <input type="text" id="p-currency" value="BOB" class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none">
+                        <input type="text" id="p-currency" value="BOB"
+                            class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none">
                     </div>
                     <div class="md:col-span-2">
                         <label class="block text-sm font-medium text-gray-700">URL de Imagen</label>
-                        <input type="url" id="p-image" class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none" placeholder="https://..." required>
+                        <input type="url" id="p-image"
+                            class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none"
+                            placeholder="https://..." required>
                     </div>
                 </div>
                 <div class="flex justify-end gap-2 mt-6">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 text-gray-500 hover:text-gray-700">Cancelar</button>
-                    <button type="submit" class="px-4 py-2 bg-pastel-dark text-white rounded-lg hover:bg-opacity-90">Guardar</button>
+                    <button type="button" onclick="closeModal()"
+                        class="px-4 py-2 text-gray-500 hover:text-gray-700">Cancelar</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-pastel-dark text-white rounded-lg hover:bg-opacity-90">Guardar</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- SDK de Firebase (versión modular) -->
+    <script type="module">
+        // 1. Importar las funciones necesarias
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
+
+        // 2. Tu configuración (ya la tienes)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCQMMRDzq_7cuGcIow8ekXu3oCO4RT06xs",
+            authDomain: "proyectos-testing-f0a11.firebaseapp.com",
+            projectId: "proyectos-testing-f0a11",
+            storageBucket: "proyectos-testing-f0a11.firebasestorage.app",
+            messagingSenderId: "363768578991",
+            appId: "1:363768578991:web:bf20fd61359e70f3f2e55a",
+            measurementId: "G-J2633G0HLX"
+        };
+
+        // 3. Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // 4. Tu correo permitido (CÁMBIALO por el tuyo)
+        const ALLOWED_EMAIL = "tu_correo@gmail.com";
+
+        // 5. Función de login (la que llamará tu botón)
+        window.loginConGoogle = async () => {
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+
+                // Verificación del correo
+                if (user.email !== ALLOWED_EMAIL) {
+                    alert("⛔ Acceso denegado. Esta cuenta no está autorizada.");
+                    await signOut(auth);
+                    return;
+                }
+
+                // Si es correcto, entramos al dashboard
+                console.log("Bienvenido, admin:", user.email);
+                // Como estamos en un módulo, no podemos llamar a showView directamente si está fuera.
+                // Usamos una variable global o un evento.
+                window.isAdmin = true;
+                window.showView('dashboard'); // Asumiendo que showView es global
+
+            } catch (error) {
+                console.error("Error en login:", error);
+                alert("Error al iniciar sesión. Inténtalo de nuevo.");
+            }
+        };
+
+        // 6. Observador de estado (opcional pero recomendado)
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.email === ALLOWED_EMAIL) {
+                console.log("Sesión activa:", user.email);
+                // Aquí podrías mostrar el dashboard automáticamente si ya había sesión
+            }
+        });
+    </script>
+
     <script>
         // 🔴 CAMBIA ESTA URL POR LA TUYA DE MOCKAPI (debe terminar en /products o el nombre de tu recurso)
-        const API_URL = 'https://6afee7e93a0e70bc8d542c7a.mockapi.io/products'; 
-        
+        const API_URL = 'https://6afee7e93a0e70bc8d542c7a.mockapi.io/products';
+        const SECRET_PASS_B64 = "Y29udHJhc2VuYVNVUEVSc2VndXJhU0lFTVBSRTIwMjY=";
+        const MAX_ATTEMPTS = 1;
+        const LOCKOUT_TIME_MS = 10000 * 60 * 60;
+
         const UNIT_CHARACTERS = {
             'VIRTUAL SINGER': ['Miku', 'Rin', 'Len', 'Luka', 'MEIKO', 'KAITO'],
             'Leo/need': ['Ichika', 'Saki', 'Honami', 'Shiho'],
@@ -274,6 +390,7 @@
             { name: 'Llavero (Acrylic Keychain)', basePrice: 35 }, { name: 'Poster Oficial', basePrice: 40 }
         ];
 
+
         let products = [];
         let isAdmin = false;
         let activeFilters = { unit: null, character: null, onlyStock: false };
@@ -282,12 +399,12 @@
         function showView(viewName) {
             ['home', 'shop', 'login', 'dashboard'].forEach(v => {
                 const el = document.getElementById(`view-${v}`);
-                if(el) el.classList.add('hidden');
+                if (el) el.classList.add('hidden');
             });
             if (viewName === 'dashboard' && !isAdmin) return showView('login');
             const target = document.getElementById(`view-${viewName}`);
-            if(target) target.classList.remove('hidden');
-            
+            if (target) target.classList.remove('hidden');
+
             const navHome = document.getElementById('nav-home');
             const navShop = document.getElementById('nav-shop');
             if (viewName === 'home') {
@@ -303,36 +420,77 @@
 
         function handleLogin(e) {
             e.preventDefault();
-            if(document.getElementById('username').value === 'admin' && document.getElementById('password').value === '1234') {
+
+            // 1. Verificar si ya está bloqueado
+            const lockoutUntil = localStorage.getItem('sekai_lockout');
+            if (lockoutUntil && Date.now() < parseInt(lockoutUntil)) {
+                const remaining = Math.ceil((parseInt(lockoutUntil) - Date.now()) / 60000);
+                alert(`🔒 Cuenta bloqueada por seguridad. Intenta de nuevo en ${remaining} minutos.`);
+                return;
+            }
+
+            // 2. Verificar intentos fallidos previos (persistente)
+            let attempts = parseInt(localStorage.getItem('sekai_attempts') || "0");
+            if (attempts >= MAX_ATTEMPTS) {
+                // Si ya usó su intento, lo bloqueamos por tiempo
+                localStorage.setItem('sekai_lockout', Date.now() + LOCKOUT_TIME_MS);
+                alert("🔒 Has agotado tu único intento. Por seguridad, el acceso está bloqueado temporalmente.");
+                return;
+            }
+
+            // 3. Obtener valores del formulario
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+
+            // 4. Verificar credenciales
+            // Decodificamos la contraseña segura para comparar
+            const realPass = atob(SECRET_PASS_B64);
+
+            if (user === 'admin' && pass === realPass) {
+                // ÉXITO
                 isAdmin = true;
+                localStorage.removeItem('sekai_attempts'); // Limpiamos intentos
+                localStorage.removeItem('sekai_lockout');
                 showView('dashboard');
-            } else alert('Usuario: admin / Pass: 1234');
+            } else {
+                // FALLO
+                attempts++;
+                localStorage.setItem('sekai_attempts', attempts);
+
+                // Si llegó al máximo, bloqueamos
+                if (attempts >= MAX_ATTEMPTS) {
+                    localStorage.setItem('sekai_lockout', Date.now() + LOCKOUT_TIME_MS);
+                    alert("❌ Contraseña incorrecta. Has agotado tu único intento. Acceso bloqueado por 1 hora.");
+                } else {
+                    alert("❌ Contraseña incorrecta. Te queda 1 intento.");
+                }
+            }
         }
 
         // --- CARGA DE DATOS ---
         async function loadProducts() {
             try {
-                if(!API_URL.includes('TU_ID')) {
+                if (!API_URL.includes('TU_ID')) {
                     const res = await fetch(API_URL);
-                    if(!res.ok) throw new Error('Error en API');
+                    if (!res.ok) throw new Error('Error en API');
                     const data = await res.json();
                     products = data.map(p => ({
                         ...p,
-                        characters: Array.isArray(p.characters) ? p.characters : (p.characters ? p.characters.split(',').map(s=>s.trim()) : [])
+                        characters: Array.isArray(p.characters) ? p.characters : (p.characters ? p.characters.split(',').map(s => s.trim()) : [])
                     }));
                 }
                 renderFilters();
                 applyFilters();
-            } catch (e) { 
-                console.error("Error cargando productos:", e); 
+            } catch (e) {
+                console.error("Error cargando productos:", e);
             }
         }
 
         // --- GENERADOR DE DATOS TEST ---
         async function seedDatabase() {
-            if(!confirm('¿Estás seguro? Esto agregará 20 productos aleatorios.')) return;
+            if (!confirm('¿Estás seguro? Esto agregará 20 productos aleatorios.')) return;
             const allUnits = Object.keys(UNIT_CHARACTERS);
-            
+
             for (let i = 0; i < 20; i++) {
                 const unit = allUnits[Math.floor(Math.random() * allUnits.length)];
                 const possibleChars = UNIT_CHARACTERS[unit];
@@ -351,7 +509,7 @@
                     isNew: Math.random() > 0.7
                 };
 
-                if(!API_URL.includes('TU_ID')) {
+                if (!API_URL.includes('TU_ID')) {
                     await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(productData) });
                 } else {
                     productData.id = Date.now().toString() + i;
@@ -359,7 +517,7 @@
                 }
             }
             alert('¡Se han generado 20 productos de prueba!');
-            if(!API_URL.includes('TU_ID')) await loadProducts();
+            if (!API_URL.includes('TU_ID')) await loadProducts();
             loadAdminTable();
             applyFilters();
         }
@@ -376,11 +534,11 @@
         }
 
         function toggleUnitFilter(checkbox) {
-            document.querySelectorAll('#filter-units input').forEach(cb => { if(cb !== checkbox) cb.checked = false; });
+            document.querySelectorAll('#filter-units input').forEach(cb => { if (cb !== checkbox) cb.checked = false; });
             activeFilters.unit = checkbox.checked ? checkbox.value : null;
             activeFilters.character = null;
             const charContainer = document.getElementById('filter-characters');
-            if(activeFilters.unit) {
+            if (activeFilters.unit) {
                 const chars = UNIT_CHARACTERS[activeFilters.unit];
                 charContainer.innerHTML = chars.map(c => `
                     <label class="flex items-center gap-2 cursor-pointer">
@@ -395,7 +553,7 @@
         }
 
         function toggleCharacterFilter(checkbox) {
-            document.querySelectorAll('#filter-characters input').forEach(cb => { if(cb !== checkbox) cb.checked = false; });
+            document.querySelectorAll('#filter-characters input').forEach(cb => { if (cb !== checkbox) cb.checked = false; });
             activeFilters.character = checkbox.checked ? checkbox.value : null;
             applyFilters();
         }
@@ -412,7 +570,7 @@
 
         function renderShopGrid(items) {
             const grid = document.getElementById('product-grid');
-            if(items.length === 0) {
+            if (items.length === 0) {
                 grid.innerHTML = '<div class="col-span-full text-center py-10 text-gray-400">No hay productos.</div>';
                 return;
             }
@@ -443,7 +601,7 @@
         // --- ADMIN TABLE ---
         function loadAdminTable() {
             const tbody = document.getElementById('admin-table-body');
-            if(products.length === 0) {
+            if (products.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-gray-400">No hay productos. ¡Usa el botón de Testing!</td></tr>';
                 return;
             }
@@ -474,13 +632,13 @@
 
         function openModal(isEdit = false) {
             modal.classList.remove('hidden');
-            if(!isEdit) { form.reset(); document.getElementById('product-id').value = ''; document.getElementById('modal-title').innerText = 'Nuevo Producto'; }
+            if (!isEdit) { form.reset(); document.getElementById('product-id').value = ''; document.getElementById('modal-title').innerText = 'Nuevo Producto'; }
         }
         function closeModal() { modal.classList.add('hidden'); }
 
         function editProduct(id) {
             const p = products.find(x => x.id === id);
-            if(p) {
+            if (p) {
                 document.getElementById('product-id').value = p.id;
                 document.getElementById('p-name').value = p.name;
                 document.getElementById('p-unit').value = p.unit;
@@ -515,11 +673,11 @@
             try {
                 if (id) {
                     // UPDATE
-                    if(!API_URL.includes('TU_ID')) {
-                        await fetch(`${API_URL}/${id}`, { 
-                            method: 'PUT', 
-                            headers: {'Content-Type': 'application/json'}, 
-                            body: JSON.stringify(data) 
+                    if (!API_URL.includes('TU_ID')) {
+                        await fetch(`${API_URL}/${id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(data)
                         });
                     } else {
                         const idx = products.findIndex(p => p.id === id);
@@ -527,20 +685,20 @@
                     }
                 } else {
                     // CREATE
-                    if(!API_URL.includes('TU_ID')) {
-                        await fetch(API_URL, { 
-                            method: 'POST', 
-                            headers: {'Content-Type': 'application/json'}, 
-                            body: JSON.stringify(data) 
+                    if (!API_URL.includes('TU_ID')) {
+                        await fetch(API_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(data)
                         });
                     } else {
                         data.id = Date.now().toString();
                         products.unshift(data);
                     }
                 }
-                
+
                 closeModal();
-                if(!API_URL.includes('TU_ID')) await loadProducts();
+                if (!API_URL.includes('TU_ID')) await loadProducts();
                 loadAdminTable();
                 applyFilters();
             } catch (error) {
@@ -550,9 +708,9 @@
         }
 
         async function deleteProduct(id) {
-            if(confirm('¿Eliminar producto?')) {
+            if (confirm('¿Eliminar producto?')) {
                 try {
-                    if(!API_URL.includes('TU_ID')) await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+                    if (!API_URL.includes('TU_ID')) await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
                     products = products.filter(p => p.id !== id);
                     loadAdminTable();
                     applyFilters();
@@ -569,4 +727,5 @@
         });
     </script>
 </body>
+
 </html>
