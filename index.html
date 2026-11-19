@@ -340,7 +340,6 @@
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
 
-                // VERIFICACIÓN POR UID
                 if (user.uid !== ALLOWED_UID) {
                     alert("⛔ Acceso denegado. Esta cuenta no está autorizada.");
                     await signOut(auth);
@@ -352,8 +351,14 @@
                 window.showView('dashboard');
 
             } catch (error) {
+                // Si el usuario cerró la ventana o se canceló la petición, no hacemos nada
+                if (error.code === 'auth/cancelled-popup-request' || error.code === 'auth/popup-closed-by-user') {
+                    console.log("Inicio de sesión cancelado.");
+                    return;
+                }
+
                 console.error("Error en login:", error);
-                alert("Error al iniciar sesión. Inténtalo de nuevo. (Revisa la consola)");
+                alert("Error al iniciar sesión. Inténtalo de nuevo.");
             }
         };
 
