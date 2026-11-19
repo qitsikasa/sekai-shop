@@ -47,8 +47,15 @@
                         class="text-gray-500 hover:text-pastel-dark font-medium transition">Tienda</button>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <button onclick="showView('login')" class="text-gray-600 hover:text-pastel-dark"><i
-                            class="fa-regular fa-user"></i></button>
+                    <button id="btn-logout" onclick="window.cerrarSesion()"
+                        class="hidden text-sm font-bold text-red-500 hover:text-red-700 transition">
+                        <i class="fa-solid fa-right-from-bracket mr-1"></i> Salir
+                    </button>
+
+                    <button onclick="showView('login')" id="nav-login-icon" class="text-gray-600 hover:text-pastel-dark"
+                        title="Admin Login">
+                        <i class="fa-regular fa-user"></i>
+                    </button>
                     <button class="text-gray-600 hover:text-pastel-dark relative">
                         <i class="fa-solid fa-bag-shopping"></i>
                         <span
@@ -394,9 +401,20 @@
         let activeFilters = { unit: null, character: null, onlyStock: false };
 
         // Esta línea es la que recibe la orden de Firebase de cambiar de pantalla
+        // Escuchar cuando Firebase confirme que el admin entró
         document.addEventListener('adminLoggedIn', () => {
             isAdmin = true;
+            document.getElementById('btn-logout').classList.remove('hidden'); // Mostrar botón salir
+            document.getElementById('nav-login-icon').classList.add('hidden'); // Ocultar icono de login
             showView('dashboard');
+        });
+
+        // Escuchar cuando Firebase confirme que se cerró sesión
+        document.addEventListener('adminLoggedOut', () => {
+            isAdmin = false;
+            document.getElementById('btn-logout').classList.add('hidden'); // Ocultar botón salir
+            document.getElementById('nav-login-icon').classList.remove('hidden'); // Mostrar icono de login
+            showView('home'); // Mandarlo al inicio
         });
 
 
