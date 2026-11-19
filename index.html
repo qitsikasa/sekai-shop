@@ -359,15 +359,29 @@
             }
         };
 
-        // Para que recuerde la sesión si recargas la página
+        window.cerrarSesion = async () => {
+            try {
+                await signOut(auth);
+                console.log("Sesión cerrada correctamente.");
+                // El onAuthStateChanged se encargará de avisar al script principal
+            } catch (error) {
+                console.error("Error al cerrar sesión:", error);
+            }
+        };
+
+        // Observador de estado (Actualizado)
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 const ALLOWED_UID = "r7Odks38mCVEaTFVb9uEKyPmXS92";
                 if (user.uid === ALLOWED_UID) {
+                    // Disparamos evento de login exitoso
                     document.dispatchEvent(new Event('adminLoggedIn'));
                 } else {
                     auth.signOut();
                 }
+            } else {
+                // Si no hay usuario, disparamos evento de logout
+                document.dispatchEvent(new Event('adminLoggedOut'));
             }
         });
 
