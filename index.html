@@ -308,6 +308,43 @@
         </div>
     </div>
 
+    <!-- MODAL DE COMPRA (Cliente) -->
+    <div id="buy-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100]">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+            <h3 class="text-xl font-bold mb-4 text-gray-800 text-center">Finalizar Compra</h3>
+
+            <form id="buy-form" onsubmit="handleBuy(event)">
+                <input type="hidden" id="buy-product-id">
+                <input type="hidden" id="buy-product-stock">
+
+                <div class="text-center mb-4">
+                    <img id="buy-image" src="" class="w-24 h-24 object-cover mx-auto rounded-lg mb-2">
+                    <p id="buy-name" class="font-bold text-sm text-gray-700"></p>
+                    <p id="buy-price" class="text-pastel-dark font-bold"></p>
+                </div>
+
+                <div class="mb-3">
+                    <label class="block text-sm font-medium text-gray-700">Tu Nombre</label>
+                    <input type="text" id="buy-client-name"
+                        class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Tu Correo</label>
+                    <input type="email" id="buy-client-email"
+                        class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none" required>
+                </div>
+
+                <div class="flex justify-end gap-2 mt-6">
+                    <button type="button" onclick="document.getElementById('buy-modal').classList.add('hidden')"
+                        class="px-4 py-2 text-gray-500 hover:text-gray-700">Cancelar</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-pastel-dark text-white rounded-lg hover:bg-opacity-90">Confirmar
+                        Compra</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- SDK de Firebase (versión modular) -->
     <script type="module">
         // 1. Importar las funciones necesarias
@@ -614,21 +651,28 @@
             grid.innerHTML = items.map(p => {
                 const isOutOfStock = p.stock <= 0;
                 return `
-                <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition overflow-hidden group relative">
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition overflow-hidden group relative flex flex-col">
                     ${isOutOfStock ? '<div class="absolute inset-0 bg-white bg-opacity-60 z-10 flex items-center justify-center"><span class="bg-red-500 text-white px-3 py-1 rounded-full font-bold transform -rotate-12">AGOTADO</span></div>' : ''}
                     <div class="relative h-64 bg-pastel-light overflow-hidden">
                         <img src="${p.imageUrl}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                         ${p.isNew && !isOutOfStock ? `<span class="absolute top-3 left-3 bg-sekai-green text-white text-xs font-bold px-2 py-1 rounded">NEW</span>` : ''}
                     </div>
-                    <div class="p-4">
-                        <p class="text-xs text-pastel-dark font-bold mb-1">${p.unit}</p>
-                        <h3 class="text-sm font-bold text-gray-800 line-clamp-2 h-10 mb-2">${p.name}</h3>
-                        <div class="flex flex-wrap gap-1 mb-2">
-                            ${p.characters.map(c => `<span class="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">${c}</span>`).join('')}
+                    <div class="p-4 flex flex-col flex-1 justify-between">
+                        <div>
+                            <p class="text-xs text-pastel-dark font-bold mb-1">${p.unit}</p>
+                            <h3 class="text-sm font-bold text-gray-800 line-clamp-2 h-10 mb-2">${p.name}</h3>
+                            <div class="flex flex-wrap gap-1 mb-2">
+                                ${p.characters.map(c => `<span class="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">${c}</span>`).join('')}
+                            </div>
                         </div>
-                        <div class="flex justify-between items-center mt-2 border-t pt-2">
-                            <span class="text-xs text-gray-500">Stock: ${p.stock}</span>
-                            <span class="font-bold text-gray-800">Bs${parseFloat(p.price).toFixed(2)}</span>
+                        <div>
+                            <div class="flex justify-between items-center mt-2 border-t pt-2 mb-3">
+                                <span class="text-xs text-gray-500">Stock: ${p.stock}</span>
+                                <span class="font-bold text-gray-800">Bs${parseFloat(p.price).toFixed(2)}</span>
+                            </div>
+                            <button onclick="openBuyModal('${p.id}')" ${isOutOfStock ? 'disabled' : ''} class="w-full py-2 rounded-lg font-bold text-white transition ${isOutOfStock ? 'bg-gray-300 cursor-not-allowed' : 'bg-pastel-dark hover:bg-opacity-90 shadow-md'}">
+                                ${isOutOfStock ? 'Sin Stock' : 'Comprar'}
+                            </button>
                         </div>
                     </div>
                 </div>`;
@@ -754,6 +798,63 @@
                 } catch (error) {
                     console.error("Error al eliminar:", error);
                 }
+            }
+        }
+
+        // --- LÓGICA DE COMPRA ---
+        function openBuyModal(id) {
+            const product = products.find(p => p.id === id);
+            if (!product || product.stock <= 0) return;
+
+            document.getElementById('buy-product-id').value = product.id;
+            document.getElementById('buy-product-stock').value = product.stock;
+            document.getElementById('buy-image').src = product.imageUrl;
+            document.getElementById('buy-name').innerText = product.name;
+            document.getElementById('buy-price').innerText = `Bs ${parseFloat(product.price).toFixed(2)}`;
+
+            document.getElementById('buy-modal').classList.remove('hidden');
+        }
+
+        async function handleBuy(e) {
+            e.preventDefault();
+            const id = document.getElementById('buy-product-id').value;
+            const currentStock = parseInt(document.getElementById('buy-product-stock').value);
+
+            if (currentStock <= 0) {
+                alert("Lo sentimos, alguien más acaba de comprar el último.");
+                return;
+            }
+
+            const newStock = currentStock - 1;
+            const product = products.find(p => p.id === id);
+
+            try {
+                // Actualizamos el stock en MockAPI
+                if (!API_URL.includes('TU_ID')) {
+                    const response = await fetch(`${API_URL}/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ ...product, stock: newStock })
+                    });
+
+                    if (!response.ok) throw new Error("Error al actualizar stock");
+                } else {
+                    // Simulación local
+                    product.stock = newStock;
+                }
+
+                alert(`¡Gracias por tu compra, ${document.getElementById('buy-client-name').value}! El stock ha bajado a ${newStock}.`);
+                document.getElementById('buy-modal').classList.add('hidden');
+                document.getElementById('buy-form').reset();
+
+                // Refrescamos la tienda y el inventario
+                if (!API_URL.includes('TU_ID')) await loadProducts();
+                applyFilters();
+                if (isAdmin) loadAdminTable();
+
+            } catch (error) {
+                console.error(error);
+                alert("Hubo un error de conexión al procesar tu compra.");
             }
         }
 
