@@ -5,7 +5,9 @@
     const api = SekaiApi;
 
     let isAdmin = false;
+    let isActive = false;
     let modal;
+    let detailModal;
     let form;
 
     function showAdminView(viewName) {
@@ -26,10 +28,14 @@
     async function handleAuthChange(admin) {
         isAdmin = admin;
 
+        if (!isActive) return;
+
         if (admin) {
             showAdminView('dashboard');
             await refreshInventory();
         } else {
+            if (modal) modal.classList.add('hidden');
+            if (detailModal) detailModal.classList.add('hidden');
             showAdminView('login');
         }
     }
@@ -66,8 +72,9 @@
                 </td>
                 <td class="px-6 py-4 text-sm font-bold text-gray-800">Bs${parseFloat(p.price).toFixed(2)}</td>
                 <td class="px-6 py-4 text-sm font-medium">
-                    <button data-action="edit" data-id="${p.id}" class="text-blue-500 hover:text-blue-700 mr-3"><i class="fa-solid fa-pen"></i></button>
-                    <button data-action="delete" data-id="${p.id}" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button>
+                    <button data-action="view" data-id="${p.id}" class="text-gray-500 hover:text-pastel-dark mr-3" title="Ver detalle"><i class="fa-solid fa-eye"></i></button>
+                    <button data-action="edit" data-id="${p.id}" class="text-blue-500 hover:text-blue-700 mr-3" title="Editar"><i class="fa-solid fa-pen"></i></button>
+                    <button data-action="delete" data-id="${p.id}" class="text-red-500 hover:text-red-700" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
                 </td>
             </tr>`).join('');
     }
@@ -107,6 +114,7 @@
     }
 
     function openModal(isEdit = false) {
+        closeDetailModal();
         modal.classList.remove('hidden');
 
         if (!isEdit) {
@@ -118,6 +126,38 @@
 
     function closeModal() {
         modal.classList.add('hidden');
+    }
+
+    function openProductDetail(id) {
+        const product = store.findProduct(id);
+        if (!product) return;
+
+        if (modal) modal.classList.add('hidden');
+
+        document.getElementById('detail-image').src = product.imageUrl;
+        document.getElementById('detail-image').alt = product.name;
+        document.getElementById('detail-unit').innerText = product.unit;
+        document.getElementById('detail-name').innerText = product.name;
+        document.getElementById('detail-price').innerText = `Bs${parseFloat(product.price).toFixed(2)}`;
+        document.getElementById('detail-id').innerText = product.id;
+
+        const charactersContainer = document.getElementById('detail-characters');
+        charactersContainer.innerHTML = product.characters.length
+            ? product.characters.map(c => `<span class="text-[11px] bg-gray-100 text-gray-600 px-2 py-1 rounded">${c}</span>`).join('')
+            : '<span class="text-xs text-gray-400 italic">Sin personajes</span>';
+
+        const newBadge = document.getElementById('detail-new');
+        newBadge.classList.toggle('hidden', !product.isNew);
+
+        const stockElement = document.getElementById('detail-stock');
+        stockElement.innerText = product.stock > 0 ? `${product.stock} en stock` : 'Agotado';
+        stockElement.className = `text-lg font-bold ${product.stock > 0 ? 'text-green-600' : 'text-red-500'}`;
+
+        detailModal.classList.remove('hidden');
+    }
+
+    function closeDetailModal() {
+        if (detailModal) detailModal.classList.add('hidden');
     }
 
     function editProduct(id) {
@@ -187,6 +227,12 @@
         document.getElementById('btn-seed').addEventListener('click', seedDatabase);
         document.getElementById('btn-new-product').addEventListener('click', () => openModal());
         document.getElementById('modal-cancel').addEventListener('click', closeModal);
+        document.getElementById('detail-close').addEventListener('click', closeDetailModal);
+        document.getElementById('detail-cancel').addEventListener('click', closeDetailModal);
+
+        detailModal.addEventListener('click', event => {
+            if (event.target === detailModal) closeDetailModal();
+        });
 
         form.addEventListener('submit', handleSaveProduct);
 
@@ -194,20 +240,45 @@
             const button = event.target.closest('button[data-action]');
             if (!button) return;
 
+            if (button.dataset.action === 'view') openProductDetail(button.dataset.id);
             if (button.dataset.action === 'edit') editProduct(button.dataset.id);
             if (button.dataset.action === 'delete') handleDelete(button.dataset.id);
         });
     }
 
+    function open() {
+        if (isActive) return;
+        isActive = true;
+
+        if (isAdmin) {
+            showAdminView('dashboard');
+            refreshInventory();
+        } else {
+            showAdminView('login');
+        }
+    }
+
+    function close() {
+        isActive = false;
+
+        ['login', 'dashboard'].forEach(view => {
+            const el = document.getElementById(`view-${view}`);
+            if (el) el.classList.add('hidden');
+        });
+
+        if (modal) modal.classList.add('hidden');
+        if (detailModal) detailModal.classList.add('hidden');
+    }
+
     function init() {
         modal = document.getElementById('crud-modal');
+        detailModal = document.getElementById('detail-modal');
         form = document.getElementById('product-form');
 
         bindEvents();
         SekaiAuth.onAdminAuthChange(handleAuthChange);
-        showAdminView('login');
     }
 
-    window.SekaiAdmin = { init };
+    window.SekaiAdmin = { init, open, close };
     init();
 })();
