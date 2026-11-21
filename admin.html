@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Project Sekai Shop - Administración</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+</head>
+
+<body class="bg-pastel-light min-h-screen font-sans text-gray-700">
+
+    <!-- NAVBAR -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <div class="bg-pastel-dark text-white p-2 rounded-lg mr-2 shadow-md"><i
+                            class="fa-solid fa-shield-halved"></i></div>
+                    <span class="font-bold text-xl text-pastel-dark">Sekai Shop Admin</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="text-sm font-medium text-gray-500 hover:text-pastel-dark transition">
+                        <i class="fa-solid fa-bag-shopping mr-1"></i> Ver Tienda
+                    </a>
+                    <button id="btn-logout"
+                        class="hidden text-sm font-bold text-red-500 hover:text-red-700 transition">
+                        <i class="fa-solid fa-right-from-bracket mr-1"></i> Salir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- VISTA: LOGIN -->
+    <div id="view-login" class="min-h-[80vh] flex items-center justify-center">
+        <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-pastel-pink text-center">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Acceso Administrador</h2>
+
+            <button id="google-login"
+                class="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 font-medium py-3 rounded-lg hover:bg-gray-50 transition shadow-sm">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"
+                    class="w-5 h-5">
+                Iniciar sesión con Google
+            </button>
+
+            <a href="index.html" class="inline-block text-sm text-gray-500 hover:text-pastel-dark mt-4">
+                Volver a la Tienda
+            </a>
+        </div>
+    </div>
+
+    <!-- VISTA: DASHBOARD -->
+    <main id="view-dashboard" class="hidden max-w-7xl mx-auto px-4 py-8 animate-fadeIn">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+            <h1 class="text-2xl font-bold text-gray-800">Inventario</h1>
+            <div class="flex flex-wrap gap-2">
+                <button id="btn-seed"
+                    class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 shadow-md flex items-center gap-2 text-sm">
+                    <i class="fa-solid fa-flask"></i> Generar 20 Datos Test
+                </button>
+                <a href="index.html"
+                    class="px-4 py-2 text-gray-600 hover:text-pastel-dark text-sm border border-gray-300 rounded-lg">Ver
+                    Tienda</a>
+                <button id="btn-new-product"
+                    class="bg-pastel-dark text-white px-4 py-2 rounded-lg hover:bg-opacity-90 shadow-md flex items-center gap-2 text-sm">
+                    <i class="fa-solid fa-plus"></i> Nuevo Producto
+                </button>
+            </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-pastel-pink">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-pastel-light">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Producto</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Unidad</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Personajes</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Stock</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Precio</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-table-body" class="bg-white divide-y divide-gray-200"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL CRUD -->
+    <div id="crud-modal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100] overflow-y-auto">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-lg shadow-2xl my-8">
+            <h3 id="modal-title" class="text-xl font-bold mb-4 text-gray-800">Nuevo Producto</h3>
+            <form id="product-form">
+                <input type="hidden" id="product-id">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700">Nombre</label>
+                        <input type="text" id="p-name"
+                            class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none"
+                            required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Unidad</label>
+                        <select id="p-unit"
+                            class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none">
+                            <option value="VIRTUAL SINGER">VIRTUAL SINGER</option>
+                            <option value="Leo/need">Leo/need</option>
+                            <option value="MORE MORE JUMP!">MORE MORE JUMP!</option>
+                            <option value="Vivid Bad Squad">Vivid Bad Squad</option>
+                            <option value="Wonderlands x Showtime">Wonderlands x Showtime</option>
+                            <option value="25-ji Nightcord de">25-ji Nightcord de</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Stock</label>
+                        <input type="number" id="p-stock"
+                            class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none"
+                            required min="0">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700">Personajes (Separados por coma)</label>
+                        <input type="text" id="p-characters" placeholder="Ej: KAITO, Kohane"
+                            class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Precio</label>
+                        <input type="number" step="0.01" id="p-price"
+                            class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none"
+                            required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Moneda</label>
+                        <input type="text" id="p-currency" value="BOB"
+                            class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700">URL de Imagen</label>
+                        <input type="url" id="p-image"
+                            class="w-full px-3 py-2 border rounded-lg focus:border-pastel-dark focus:outline-none"
+                            placeholder="https://..." required>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 mt-6">
+                    <button type="button" id="modal-cancel"
+                        class="px-4 py-2 text-gray-500 hover:text-gray-700">Cancelar</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-pastel-dark text-white rounded-lg hover:bg-opacity-90">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/lib/config.js"></script>
+    <script src="js/lib/api.js"></script>
+    <script src="js/lib/store.js"></script>
+    <script src="js/lib/auth.js"></script>
+    <script src="js/pages/admin.js"></script>
+</body>
+
+</html>
