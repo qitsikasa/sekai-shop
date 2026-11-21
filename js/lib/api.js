@@ -1,65 +1,68 @@
 (function () {
-    const API_URL = SekaiConfig.API_URL;
-    const isRemote = !API_URL.includes('TU_ID');
-    let localProducts = [];
+    const db = SekaiFirebase.db;
+    const productsRef = db.collection(SekaiConfig.COLLECTION);
 
     function normalize(product) {
         const characters = Array.isArray(product.characters)
             ? product.characters
-            : (product.characters ? product.characters.split(',').map(s => s.trim()).filter(Boolean) : []);
+            : (product.characters ? String(product.characters).split(',').map(s => s.trim()).filter(Boolean) : []);
         return { ...product, characters };
     }
 
-    async function fetchProducts() {
-        if (!isRemote) return localProducts.map(normalize);
+    function toProduct(doc) {
+        return normalize({ id: doc.id, ...doc.data() });
+    }
 
-        const response = await fetch(API_URL);
-        if (!response.ok) throw new Error('Error en API');
-        const data = await response.json();
-        return data.map(normalize);
+    async function fetchProducts() {
+        const snapshot = await productsRef.get();
+        return snapshot.docs
+            .map(toProduct)
+            .sort((a, b) => {
+                const aTime = a.createdAt && a.createdAt.seconds ? a.createdAt.seconds : 0;
+                const bTime = b.createdAt && b.createdAt.seconds ? b.createdAt.seconds : 0;
+                return bTime - aTime;
+            });
     }
 
     async function createProduct(data) {
-        if (!isRemote) {
-            localProducts.unshift({ ...data, id: String(Date.now() + localProducts.length) });
-            return;
-        }
-
-        await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+        await productsRef.add({
+            ...data,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
     }
 
     async function updateProduct(id, data) {
-        if (!isRemote) {
-            const index = localProducts.findIndex(p => String(p.id) === String(id));
-            if (index !== -1) localProducts[index] = { ...localProducts[index], ...data };
-            return;
-        }
+        await productsRef.doc(String(id)).set({
+            ...data,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+    }
 
-        await fetch(`${API_URL}/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+    async function decrementStock(id) {
+        const ref = productsRef.doc(String(id));
+
+        return db.runTransaction(async transaction => {
+            const snapshot = await transaction.get(ref);
+            if (!snapshot.exists) throw new Error('Producto no encontrado');
+
+            const currentStock = Number(snapshot.data().stock) || 0;
+            if (currentStock <= 0) throw new Error('Sin stock');
+
+            const newStock = currentStock - 1;
+            transaction.update(ref, { stock: newStock });
+            return newStock;
         });
     }
 
     async function removeProduct(id) {
-        if (!isRemote) {
-            localProducts = localProducts.filter(p => String(p.id) !== String(id));
-            return;
-        }
-
-        await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+        await productsRef.doc(String(id)).delete();
     }
 
     window.SekaiApi = {
-        isRemote,
         fetchProducts,
         createProduct,
         updateProduct,
+        decrementStock,
         removeProduct
     };
 })();

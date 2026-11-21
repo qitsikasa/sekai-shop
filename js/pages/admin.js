@@ -1,6 +1,5 @@
 (function () {
     const UNIT_CHARACTERS = SekaiConfig.UNIT_CHARACTERS;
-    const MERCH_TYPES = SekaiConfig.MERCH_TYPES;
     const store = SekaiStore;
     const api = SekaiApi;
 
@@ -53,7 +52,7 @@
         const tbody = document.getElementById('admin-table-body');
 
         if (store.state.products.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-gray-400">No hay productos. ¡Usa el botón de Testing!</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-gray-400">No hay productos. ¡Usa "Cargar Catálogo Real"!</td></tr>';
             return;
         }
 
@@ -70,7 +69,7 @@
                 <td class="px-6 py-4">
                     <span class="px-2 py-1 text-xs font-bold rounded-full ${p.stock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">${p.stock}</span>
                 </td>
-                <td class="px-6 py-4 text-sm font-bold text-gray-800">Bs${parseFloat(p.price).toFixed(2)}</td>
+                <td class="px-6 py-4 text-sm font-bold text-gray-800">${SekaiConfig.formatPrice(p)}</td>
                 <td class="px-6 py-4 text-sm font-medium">
                     <button data-action="view" data-id="${p.id}" class="text-gray-500 hover:text-pastel-dark mr-3" title="Ver detalle"><i class="fa-solid fa-eye"></i></button>
                     <button data-action="edit" data-id="${p.id}" class="text-blue-500 hover:text-blue-700 mr-3" title="Editar"><i class="fa-solid fa-pen"></i></button>
@@ -79,38 +78,94 @@
             </tr>`).join('');
     }
 
-    async function seedDatabase() {
-        if (!confirm('¿Estás seguro? Esto agregará 20 productos aleatorios.')) return;
-
-        const allUnits = Object.keys(UNIT_CHARACTERS);
-
-        for (let i = 0; i < 20; i++) {
-            const unit = allUnits[Math.floor(Math.random() * allUnits.length)];
-            const possibleChars = UNIT_CHARACTERS[unit];
-            const numChars = Math.random() > 0.5 ? 2 : 1;
-            const shuffled = [...possibleChars].sort(() => 0.5 - Math.random());
-            const selectedChars = shuffled.slice(0, numChars);
-            const merch = MERCH_TYPES[Math.floor(Math.random() * MERCH_TYPES.length)];
-            const name = `${merch.name} - ${selectedChars.join(' & ')}`;
-            const price = merch.basePrice + (Math.random() * 10 - 5);
-            const stock = Math.floor(Math.random() * 15);
-
-            const productData = {
-                name,
-                unit,
-                characters: selectedChars,
-                price: parseFloat(price.toFixed(2)),
-                currency: 'BOB',
-                stock,
-                imageUrl: `https://placehold.co/300x300/FFD1DC/000000?text=${encodeURIComponent(selectedChars[0])}`,
-                isNew: Math.random() > 0.7
-            };
-
-            await api.createProduct(productData);
+    async function importCatalog() {
+        const catalog = window.SekaiCatalog || [];
+        if (!catalog.length) {
+            alert('No hay catálogo real configurado.');
+            return;
         }
 
-        alert('¡Se han generado 20 productos de prueba!');
-        await refreshInventory();
+        if (!confirm(`¿Cargar ${catalog.length} productos reales de Project Sekai? Se omitirán los que ya existan.`)) return;
+
+        try {
+            const existingCatalogIds = new Set(store.state.products.map(p => p.catalogId).filter(Boolean));
+            let imported = 0;
+            let skipped = 0;
+
+            for (const product of catalog) {
+                if (existingCatalogIds.has(product.catalogId)) {
+                    skipped++;
+                    continue;
+                }
+
+                await api.createProduct({
+                    ...product,
+                    characters: [...product.characters]
+                });
+
+                existingCatalogIds.add(product.catalogId);
+                imported++;
+            }
+
+            alert(`Catálogo cargado: ${imported} productos nuevos, ${skipped} omitidos.`);
+            await refreshInventory();
+        } catch (error) {
+            console.error('Error importando el catálogo real:', error);
+            alert('No se pudo cargar el catálogo real.');
+        }
+    }
+
+    async function importLegacyProducts() {
+        const legacyUrl = SekaiConfig.LEGACY_API_URL;
+        if (!legacyUrl || legacyUrl.includes('TU_ID')) {
+            alert('No hay una API antigua configurada para importar.');
+            return;
+        }
+
+        if (!confirm('¿Importar los productos de MockAPI a Firestore? Se omitirán los que ya hayan sido importados.')) return;
+
+        try {
+            const response = await fetch(legacyUrl);
+            if (!response.ok) throw new Error('No se pudo leer la API antigua');
+
+            const legacyProducts = await response.json();
+            const existingLegacyIds = new Set(store.state.products.map(p => p.legacyId).filter(Boolean));
+            let imported = 0;
+            let skipped = 0;
+
+            for (const product of legacyProducts) {
+                const legacyId = String(product.id);
+                if (existingLegacyIds.has(legacyId)) {
+                    skipped++;
+                    continue;
+                }
+
+                const characters = Array.isArray(product.characters)
+                    ? product.characters
+                    : (product.characters ? String(product.characters).split(',').map(s => s.trim()).filter(Boolean) : []);
+
+                await api.createProduct({
+                    name: product.name,
+                    unit: product.unit,
+                    characters,
+                    price: parseFloat(product.price),
+                    currency: product.currency || 'BOB',
+                    stock: Number(product.stock) || 0,
+                    imageUrl: product.imageUrl,
+                    isNew: Boolean(product.isNew),
+                    legacyId
+                });
+
+                existingLegacyIds.add(legacyId);
+                imported++;
+            }
+
+            alert(`Importación terminada: ${imported} productos nuevos, ${skipped} omitidos.`);
+            await refreshInventory();
+        } catch (error) {
+            console.error('Error importando productos:', error);
+            alert('No se pudieron importar los productos de MockAPI.');
+        }
     }
 
     function openModal(isEdit = false) {
@@ -138,7 +193,7 @@
         document.getElementById('detail-image').alt = product.name;
         document.getElementById('detail-unit').innerText = product.unit;
         document.getElementById('detail-name').innerText = product.name;
-        document.getElementById('detail-price').innerText = `Bs${parseFloat(product.price).toFixed(2)}`;
+        document.getElementById('detail-price').innerText = SekaiConfig.formatPrice(product);
         document.getElementById('detail-id').innerText = product.id;
 
         const charactersContainer = document.getElementById('detail-characters');
@@ -224,7 +279,8 @@
     function bindEvents() {
         document.getElementById('google-login').addEventListener('click', () => SekaiAuth.login());
         document.getElementById('btn-logout').addEventListener('click', () => SekaiAuth.logout());
-        document.getElementById('btn-seed').addEventListener('click', seedDatabase);
+        document.getElementById('btn-seed').addEventListener('click', importCatalog);
+        document.getElementById('btn-import').addEventListener('click', importLegacyProducts);
         document.getElementById('btn-new-product').addEventListener('click', () => openModal());
         document.getElementById('modal-cancel').addEventListener('click', closeModal);
         document.getElementById('detail-close').addEventListener('click', closeDetailModal);

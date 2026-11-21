@@ -24,6 +24,11 @@
             return;
         }
 
+        if (!UNIT_CHARACTERS[unit] || UNIT_CHARACTERS[unit].length === 0) {
+            container.innerHTML = '<p class="text-xs text-gray-400 italic">Esta unidad no tiene personajes</p>';
+            return;
+        }
+
         container.innerHTML = UNIT_CHARACTERS[unit].map(character => `
             <label class="flex items-center gap-2 cursor-pointer">
                 <input type="checkbox" value="${character}" class="accent-pastel-dark w-4 h-4">
@@ -95,13 +100,14 @@
                         <p class="text-xs text-pastel-dark font-bold mb-1">${p.unit}</p>
                         <h3 class="text-sm font-bold text-gray-800 line-clamp-2 h-10 mb-2">${p.name}</h3>
                         <div class="flex flex-wrap gap-1 mb-2">
-                            ${p.characters.map(c => `<span class="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">${c}</span>`).join('')}
+                            ${p.characters.slice(0, 4).map(c => `<span class="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">${c}</span>`).join('')}
+                            ${p.characters.length > 4 ? `<span class="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">+${p.characters.length - 4}</span>` : ''}
                         </div>
                     </div>
                     <div>
                         <div class="flex justify-between items-center mt-2 border-t pt-2 mb-3">
                             <span class="text-xs text-gray-500">Stock: ${p.stock}</span>
-                            <span class="font-bold text-gray-800">Bs${parseFloat(p.price).toFixed(2)}</span>
+                            <span class="font-bold text-gray-800">${SekaiConfig.formatPrice(p)}</span>
                         </div>
                         <button data-buy-id="${p.id}" ${isOutOfStock ? 'disabled' : ''} class="w-full py-2 rounded-lg font-bold text-white transition ${isOutOfStock ? 'bg-gray-300 cursor-not-allowed' : 'bg-pastel-dark hover:bg-opacity-90 shadow-md'}">
                             ${isOutOfStock ? 'Sin Stock' : 'Comprar'}
@@ -120,7 +126,7 @@
         document.getElementById('buy-product-stock').value = product.stock;
         document.getElementById('buy-image').src = product.imageUrl;
         document.getElementById('buy-name').innerText = product.name;
-        document.getElementById('buy-price').innerText = `Bs ${parseFloat(product.price).toFixed(2)}`;
+        document.getElementById('buy-price').innerText = SekaiConfig.formatPrice(product);
 
         document.getElementById('buy-modal').classList.remove('hidden');
     }
@@ -143,10 +149,8 @@
         const product = store.findProduct(id);
         if (!product) return;
 
-        const newStock = currentStock - 1;
-
         try {
-            await api.updateProduct(id, { ...product, stock: newStock });
+            const newStock = await api.decrementStock(id);
 
             alert(`¡Gracias por tu compra, ${document.getElementById('buy-client-name').value}! El stock ha bajado a ${newStock}.`);
 
@@ -157,7 +161,7 @@
             applyFilters();
         } catch (error) {
             console.error(error);
-            alert('Hubo un error de conexión al procesar tu compra.');
+            alert('No se pudo completar la compra. Puede que el producto ya no tenga stock.');
         }
     }
 

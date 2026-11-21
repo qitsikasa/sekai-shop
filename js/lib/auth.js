@@ -1,7 +1,9 @@
 (function () {
     const config = SekaiConfig;
 
-    firebase.initializeApp(config.FIREBASE_CONFIG);
+    if (!firebase.apps.length) {
+        firebase.initializeApp(config.FIREBASE_CONFIG);
+    }
 
     const auth = firebase.auth();
     const provider = new firebase.auth.GoogleAuthProvider();
